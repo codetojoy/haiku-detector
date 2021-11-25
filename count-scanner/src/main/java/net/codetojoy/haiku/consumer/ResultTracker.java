@@ -4,41 +4,38 @@ import net.codetojoy.haiku.common.Constants;
 import net.codetojoy.haiku.common.Entry;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ResultTracker {
-    private int count = 0;
     private ArrayDeque<Entry> queue = new ArrayDeque<Entry>();
 
     public boolean isMatch() {
-        return count == Constants.TARGET_NUM_SYLLABLES;
+        return getSyllableCount() == Constants.TARGET_NUM_SYLLABLES;
     }
 
     public int getSyllableCount() {
-        return count;
+        var result = queue.stream().collect(Collectors.summingInt(Entry::syllableCount));
+        return result;
     }
 
     public List<Entry> getEntries() {
         return new ArrayList<Entry>(queue);
     }
 
-    protected void popWhile() {
-        if (queue.isEmpty()) {
-            count = 0;
-        } else {
-            while (count > Constants.TARGET_NUM_SYLLABLES) {
-                var entry = queue.removeFirst();
-                count = count - entry.syllableCount();
-            }
+    protected void popWhile(int initialCount) {
+        var count = initialCount;
+        while (count > Constants.TARGET_NUM_SYLLABLES) {
+            var entry = queue.removeFirst();
+            count = count - entry.syllableCount();
         }
     }
 
     public void consume(Entry entry) {
-        var entryCount = entry.syllableCount();
-        count += entryCount;
+        var count = getSyllableCount() + entry.syllableCount();
         queue.add(entry);
 
         if (count > Constants.TARGET_NUM_SYLLABLES) {
-            popWhile();
+            popWhile(count);
         }
     }
 }
