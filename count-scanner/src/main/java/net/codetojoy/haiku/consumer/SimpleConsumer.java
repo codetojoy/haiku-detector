@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleConsumer implements Consumer<Entry> {
+    // TODO: consider the following:
+    //      - Consumer provides a Stream
+    //      - consume stream and generate List<Optional<Result>>
+    //      - i.e. ResultTracker::consume returns Optional<Result>
     @Override
     public List<Result> consume(Queue<Entry> queue) {
         var results = new ArrayList<Result>();
