@@ -1,21 +1,48 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "3.0.0"
+}
 
 apply plugin: 'java'
 apply plugin: 'application'
 
+// my original CLI
+/*
 mainClassName = 'net.codetojoy.haiku.Main'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation 'junit:junit:4.12'
-}
-
 installDist.doFirst {
     ant.delete(dir: project.stagingDir)
 }
 
 installDist {
     into project.stagingDir
+}
+*/
+
+// REST server
+application {
+    mainClass.set("net.codetojoy.Application")
+}
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("net.codetojoy.*")
+    }
+}
+
+dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("io.micronaut:micronaut-validation")
+
+    testImplementation 'junit:junit:4.12'
 }
