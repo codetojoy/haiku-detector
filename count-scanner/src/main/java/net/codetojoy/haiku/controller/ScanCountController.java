@@ -24,7 +24,7 @@ public class ScanCountController {
 
     @Post("/find")
     public ResultList find(@Body DataList dataList) {
-        var version = "v5";
+        var version = "------------------ v6";
         System.out.println("TRACER " + version + " param dataList: " + dataList.toString());
         var queue = new SimpleArrayQueue<Entry>();
 
