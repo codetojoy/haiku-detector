@@ -12,7 +12,7 @@ public class SimpleProducer implements Producer<Entry> {
         for (int i = 1; i <= NUM_ENTRIES; i++) {
             int id = i;
             int syllableCount = random.get(MAX_SYLLABLE_COUNT);
-            var entry = new Entry(id, syllableCount);
+            var entry = new Entry("" + id, syllableCount);
             queue.push(entry);
         }
     }
