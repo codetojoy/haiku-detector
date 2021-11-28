@@ -22,6 +22,12 @@ record DataList(List<Entry> data) {
 
 @Controller("/scan-count")
 public class ScanCountController {
+    @Get("/ping")
+    public String ping() {
+        var format = "{ \"status\": \"ok\", \"time\": \"%s\" }";
+        return String.format(format, new java.util.Date());
+    }
+
     @Post("/find")
     public String find(@Body DataList dataList) {
         System.out.println("TRACER v3 param dataList: " + dataList.toString());
